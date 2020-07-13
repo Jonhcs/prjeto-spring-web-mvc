@@ -57,6 +57,11 @@ public class IndexController {
 		return andView;
 	}
 	
+	@GetMapping("/login")
+	public String login() {
+		return "login";
+	}
+	
 	@GetMapping("/editarperfil")
 	public ModelAndView mostrarEdicao(Authentication auth) {
 		String login = auth.getName();
