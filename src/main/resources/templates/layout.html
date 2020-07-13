@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Sistema Spring</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+	integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+	crossorigin="anonymous">
+
+<link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css"
+	rel="stylesheet" type="text/css" />
+</head>
+<body>
+	<nav
+		class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+		<a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="/">Sistema
+			Spring</a>
+		<ul sec:authorize="isAnonymous()" class="navbar-nav px-3">
+			<li class="nav-item text-nowrap"><a class="nav-link"
+				th:href="@{/login}">Acessar</a></li>
+		</ul>
+
+
+		<div class="w-100 mt-2" sec:authorize="isAuthenticated()">
+			<form sec:authorize="isAuthenticated()" action="/pesquisarpessoa"
+				method="post">
+				<div class="row">
+					<div class=" col-sm-5 form-group">
+						<input class="form-control" type="text" name="nomepesquisar"
+							id="nomepesquisar" placeholder="Pesquise por pessoa cadastrada">
+					</div>
+					<div class="col-sm-5 form-group">
+						<select class="form-control" id="pesquisarsexo"
+							name="pesquisarsexo">
+							<option disable selected="selected">Selecione</option>
+							<option value="MASCULINO" th:text="Masculino"></option>
+							<option value="FEMININO" th:text="Feminino"></option>
+						</select>
+					</div>
+
+					<div class="col-sm-2">
+						<button class="btn btn-outline-success " type="submit">Pesquisar</button>
+
+					</div>
+				</div>
+			</form>
+		</div>
+
+
+		<ul sec:authorize="isAuthenticated()" class="navbar-nav px-3">
+			<li class="nav-item text-nowrap"><a class="nav-link"
+				href="/logout">Sair</a></li>
+		</ul>
+	</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<nav sec:authorize="isAuthenticated()" id="sidebarMenu"
+				class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+				<div class="sidebar-sticky pt-3">
+					<ul class="nav flex-column">
+						<li class="text-center">
+							<div th:if="${usuarioLogado.arquivo != null}">
+								<img style="width: 100px; height: 100px;" class="rounded-circle"
+									alt="Arquivo" th:src="${usuarioLogado.fotoTemp}">
+							</div>
+							<div th:if="${usuarioLogado.arquivo == null}">
+
+								<div style="width: 100px; height: 100px;"
+									class="rounded-circle bg-success text-white"></div>
+							</div> <span th:text="${usuarioLogado.login}"></span>
+						</li>
+						<hr>
+						<li class="nav-item"><a class="nav-link active" href="#">
+								<span data-feather="home"></span> Dashboard <span
+								class="sr-only">(current)</span>
+						</a></li>
+						<li class="nav-item"><a class="nav-link"
+							href="/cadastropessoa"> <span data-feather="file"></span>
+								Pessoas
+						</a></li>
+
+						<!-- sec:authorize="hasRole('ROLE_CAIXA')"  -->
+						<li class="nav-item"><a class="nav-link"
+							href="/cadastrousuario"> <span data-feather="shopping-cart"></span>
+								Cadastro Usuário
+						</a></li>
+						<li class="nav-item"><a class="nav-link" href="/editarperfil">
+								<span></span> Editar Perfil
+						</a></li>
+					</ul>
+
+				</div>
+			</nav>
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+
+				<th:block layout:fragment="content"></th:block>
+
+			</main>
+		</div>
+
+
+
+
+		<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+		<script
+			src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+			integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+			crossorigin="anonymous"></script>
+		<script
+			src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+			integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+			crossorigin="anonymous"></script>
+		<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js"
+			type="text/javascript"></script>
+
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.0.0-alpha/Chart.min.js"></script>
+		<script>
+			var ctx = $("#myChart");
+			var myChart = new Chart(ctx,
+				{
+					type : 'line',
+					data : {
+						labels : [ 'Jan', 'Fev', 'Mar', 'Abr', 'Mai',
+								'Jun','Jul','Ago','Set','Out','Nov','Dez' ],
+						datasets : [ {
+							label : 'Quantidade de pessoas cadastradas 2019',
+							data : [ 12, 19, 3, 40, 30, 40,1,23,100,95,150,200 ],
+							borderWidth : 6,
+							borderColor : 'rgba(112, 192, 187, 0.7)' ,
+							backgroundColor : 'transparent' ,
+						},
+						{
+							label : 'Quantidade de pessoas cadastradas 2020',
+							data : [ 200, 135, 10, 30, 15, 25,1,0,0,0,0,0 ],
+							borderWidth : 6,
+							borderColor : 'rgba(6, 204, 6, 0.5)' ,
+							backgroundColor : 'transparent' ,
+						}	
+						]
+					},
+					
+				});
+	</script>
+</body>
+</html>

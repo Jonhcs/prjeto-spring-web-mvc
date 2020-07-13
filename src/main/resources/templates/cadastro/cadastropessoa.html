@@ -1,0 +1,239 @@
+<html  xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	layout:decorator="layout" >
+<link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+
+<th:block  layout:fragment="content">
+
+	<div  class="w-50 p-3 mx-auto">
+		<div th:each=" m : ${msg}">
+			<div class="alert alert-danger mt-2 text-center ">
+				<span th:text="${m}"></span>
+			</div>
+		</div>
+		<h1 class="text-center">Cadastro pessoa</h1>
+		<form id="formPessoa" action="/salvarpessoa" method="post"
+			th:object="${pessoa}" enctype="multipart/form-data">
+			<div class="form-group">
+				<input required="required" class="form-control" th:field="*{id}" type="text" name="id"
+					id="id" readonly="readonly">
+			</div>
+			<div class="form-group">
+				<label for="nome">Nome: </label> <input required="required" class="form-control"
+					th:field="*{nome}" type="text" name="nome" id="nome"
+					placeholder="Digite o nome: ">
+			</div>
+			<div class="form-group">
+				<label  for="sobrenome">Sobrenome: </label> <input required="required"
+					th:field="*{sobrenome}" class="form-control" type="text"
+					name="sobrenome" id="sobrenome" placeholder="Digite o sobrenome: ">
+			</div>
+			<div class="form-group">
+				<label  for="sexo">Sexo: </label>
+				<select th:field="*{sexo}" class="form-control" id="sexo" name="sexo" >
+					<option value="MASCULINO" th:text="Masculino" ></option>
+					<option value="FEMININO" th:text="Feminino"  ></option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label  for="cep">cep: </label> <input 
+					th:field="*{cep}" class="form-control" type="text"
+					name="cep" id="cep" placeholder="Digite o cep: ">
+			</div>
+			<div class="form-group">
+				<label  for="rua">rua: </label> <input 
+					th:field="*{rua}" class="form-control" type="text"
+					name="rua" id="rua" placeholder="Digite o rua: ">
+			</div>
+			
+			<div class="form-group">
+				<label  for="bairro">bairro: </label> <input 
+					th:field="*{bairro}" class="form-control" type="text"
+					name="bairro" id="bairro" placeholder="Digite o bairro: ">
+			</div>
+			
+			<div class="form-group">
+				<label  for="cidade">cidade: </label> <input 
+					th:field="*{cidade}" class="form-control" type="text"
+					name="cidade" id="cidade" placeholder="Digite o cidade: ">
+			</div>
+			
+			<div class="form-group">
+				<label  for="uf">Estado: </label> <input 
+					th:field="*{uf}" class="form-control" type="text"
+					name="uf" id="uf" placeholder="Digite o uf: ">
+			</div>
+			<div class="form-group">
+				<label  for="dataNascimento">Data de Nascimento: </label> <input 
+					th:field="*{dataNascimento}" class="form-control" type="date"
+					name="dataNascimento" id="dataNascimento" >
+			</div>
+			
+			<div class="form-group">
+				<label  for="file">Arquivo: </label> <input 
+				 class="form-control" type="file"
+					name="file" id="file" >
+			</div>
+			
+
+			<div class="d-flex justify-content-center">
+				<button class=" d-inline-block btn btn-outline-success w-50 mr-3"
+					type="submit">Salvar</button>
+				<button type="button" class="btn btn-outline-warning w-50"
+					onclick="resetar();">Resetar Campos</button>
+
+			</div>
+		</form>
+	</div>
+	<hr>
+	<div class="container">
+		<form action="/pesquisarpessoa" method="post">
+			<div class="form-group">
+				<label for="pesquisar">Pesquisar</label> <input class="form-control"
+					type="text" name="nomepesquisar" id="nomepesquisar">
+			</div>
+			<div class="form-group">
+				<label  for="pesquisarsexo">Sexo: </label>
+				<select class="form-control" id="pesquisarsexo" name="pesquisarsexo">
+					<option disable selected="selected">Selecione</option>
+					<option value="MASCULINO" th:text="Masculino" ></option>
+					<option value="FEMININO" th:text="Feminino"  ></option>
+				</select>
+			</div>
+			<div class="d-flex justify-content-center">
+				<button class="btn btn-outline-success w-50 mr-2" type="submit">Pesquisar</button>
+				<a class="btn btn-outline-info w-50" href="/listapessoas">Listar
+					Todos</a>
+			</div>
+
+		</form>
+	</div>
+
+	<hr>
+	<div>
+		<table class=" table table-dark">
+			<thead>
+				<tr>
+					<th scope="col">Id</th>
+					<th scope="col">Nome</th>
+					<th scope="col">Sobrenome</th>
+					<th scope="col">Imagem</th>
+					<th scope="col">Editar</th>
+					<th scope="col">Excluir</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="pessoa : ${ pessoas }">
+					<td scope="row" th:text="${pessoa.id}"></td>
+					<td><a
+						th:href="@{/telefone/{idpessoa}(idpessoa=${pessoa.id})}"><span
+							th:text="${pessoa.nome}"></span> </a></td>
+					<td th:text="${pessoa.sobrenome}"></td>
+					<td ><a th:if ="${pessoa.arquivo != null}"
+						th:href="@{/baixararquivo/{idpessoa}(idpessoa=${pessoa.id})}"><img alt="Arquivo" th:src="${pessoa.fotoTemp}" width="50px;" height="50px;"></a>
+						<p class="text-warning" th:if ="${pessoa.arquivo == null}">Não Existe Arquivo</p>	
+					</td>
+					<td><a 
+						th:href="@{/editarpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Editar</a></td>
+					<td><a
+						th:href="@{/deletarpessoa/{idpessoa}(idpessoa=${pessoa.id})}">Excluir</a></td>
+				</tr>
+			</tbody>
+		</table>
+		
+		<div class="m-2" align="center">
+			
+			<span th:if="${pessoas.hasPrevious()}">
+				<a th:href="@{/pessoaspag(page=${pessoas.number-1}, size=${pessoas.size})}">Anterior</a>
+			</span>
+			
+			<th:block th:each = "i: ${#numbers.sequence(0, pessoas.totalPages - 1)}">
+				<a th:href="@{/pessoaspag(page=${i}, size=${pessoas.size})}">[[ ${i} + 1  ]]</a>
+			</th:block>
+			
+			<span th:if="${pessoas.hasNext()}">
+				<a th:href="@{/pessoaspag(page=${pessoas.number+1}, size=${pessoas.size})}">Próximo</a>
+			</span>
+		</div>
+	</div>
+	
+	
+    <!-- Adicionando JQuery -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+
+    <!-- Adicionando Javascript -->
+    <script type="text/javascript" >
+
+        $(document).ready(function() {
+			
+        	$("#dataNascimento").datepicker({
+        		showOthermonths:true,
+        		format: 'yyyy-mm-dd'
+        	});
+            function limpa_formulário_cep() {
+                // Limpa valores do formulário de cep.
+                $("#rua").val("");
+                $("#bairro").val("");
+                $("#cidade").val("");
+                $("#uf").val("");
+                $("#ibge").val("");
+            }
+            
+            //Quando o campo cep perde o foco.
+            $("#cep").blur(function() {
+
+                //Nova variável "cep" somente com dígitos.
+                var cep = $(this).val().replace(/\D/g, '');
+
+                //Verifica se campo cep possui valor informado.
+                if (cep != "") {
+
+                    //Expressão regular para validar o CEP.
+                    var validacep = /^[0-9]{8}$/;
+
+                    //Valida o formato do CEP.
+                    if(validacep.test(cep)) {
+
+                        //Preenche os campos com "..." enquanto consulta webservice.
+                        $("#rua").val("...");
+                        $("#bairro").val("...");
+                        $("#cidade").val("...");
+                        $("#uf").val("...");
+                        $("#ibge").val("...");
+
+                        //Consulta o webservice viacep.com.br/
+                        $.getJSON("https://viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
+
+                            if (!("erro" in dados)) {
+                                //Atualiza os campos com os valores da consulta.
+                                $("#rua").val(dados.logradouro);
+                                $("#bairro").val(dados.bairro);
+                                $("#cidade").val(dados.localidade);
+                                $("#uf").val(dados.uf);
+                                $("#ibge").val(dados.ibge);
+                            } //end if.
+                            else {
+                                //CEP pesquisado não foi encontrado.
+                                limpa_formulário_cep();
+                                alert("CEP não encontrado.");
+                            }
+                        });
+                    } //end if.
+                    else {
+                        //cep é inválido.
+                        limpa_formulário_cep();
+                        alert("Formato de CEP inválido.");
+                    }
+                } //end if.
+                else {
+                    //cep sem valor, limpa formulário.
+                    limpa_formulário_cep();
+                }
+            });
+        });
+
+    </script>
+	
+	<th:block>
+</html>

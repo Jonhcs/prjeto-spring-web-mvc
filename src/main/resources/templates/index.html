@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<meta charset="utf-8" />
+<th:block layout:fragment="content">
+	<center class="mt-5">
+		<h1>Bem Vindo</h1>
+		<span sec:authentication="name"></span>
+
+	</center>
+	<canvas class="mt-5 mb-5" id="myChart" width="200" height="100"></canvas>
+	
+	<th:block>
+</html>

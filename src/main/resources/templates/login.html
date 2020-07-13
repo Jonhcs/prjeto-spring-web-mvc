@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout">
+<meta charset="UTF-8">
+<th:block layout:fragment="content">
+	<div class="container mt-5">
+		<div class="mx-auto w-50 p-5 mb-2 bg-secondary text-white rounded">
+			<div class="text-center border-bottom border-success">
+				<h3>Acesso como Administrador</h3>
+			</div>
+			<form th:action="@{/login}" method="post">
+
+				<label for="login">Login: </label> <input type="text" id="username"
+					name="username" class="form-control" placeholder="Seu login">
+
+				<label for="password">Senha: </label> <input type="password"
+					id="password" name="password" class="form-control"
+					placeholder="Sua senha">
+
+				<button class="btn  btn-success btn-block mt-2 " type="submit">Acessar</button>
+
+			</form>
+		</div>
+	</div>
+
+
+
+	<th:block>
+</html>
