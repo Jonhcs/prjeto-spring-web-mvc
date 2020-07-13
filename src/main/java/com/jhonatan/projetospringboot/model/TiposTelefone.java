@@ -2,7 +2,7 @@ package com.jhonatan.projetospringboot.model;
 
 public enum TiposTelefone {
 	CELULAR("Celular"),
-	TELEFONE("Pleno"),
+	TELEFONE("Telefone"),
 	RECADO("Recado");
 
 	private String nome;

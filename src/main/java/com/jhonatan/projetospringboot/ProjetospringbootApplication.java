@@ -16,7 +16,8 @@ public class ProjetospringbootApplication implements WebMvcConfigurer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ProjetospringbootApplication.class, args);
-		
+		BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+		System.out.println(bcrypt.encode("123"));
 	}
 	
 	@Override
